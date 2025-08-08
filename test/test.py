@@ -2,6 +2,10 @@ import pytest
 import pandas as pd
 import numpy as np
 from pathlib import Path
+import sys
+
+sys.path.append(str(Path(__file__).parent.parent))
+
 from f_cam import FrontCameraSimulation
 from sensor import SensorSimulation
 

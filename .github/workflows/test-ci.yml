@@ -21,13 +21,13 @@ jobs:
           run: |
             pip install -r ./requirements.txt
         - name: Run test
-          run: pytest test.py > report.html
+          run: pytest test/test.py > report.html
         - uses: actions/upload-artifact@v4
           with:
             name: report-${{ matrix.os }}-${{ matrix.python-version }}
             path: report.html
         - name: Run processing test
-          run: pytest test_proc.py > proc-report.html
+          run: pytest test/test_proc.py > proc-report.html
         - uses: actions/upload-artifact@v4
           with:
             name: proc-report-${{ matrix.os }}-${{ matrix.python-version }}

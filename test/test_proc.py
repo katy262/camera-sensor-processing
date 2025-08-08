@@ -3,7 +3,11 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import os
-from resim import Reprocessor  # assuming the file is named reprocessor.py
+import sys
+
+sys.path.append(str(Path(__file__).parent.parent))
+
+from resim import Reprocessor
 
 # Fixtures for test data
 @pytest.fixture
