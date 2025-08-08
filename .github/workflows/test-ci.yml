@@ -26,4 +26,9 @@ jobs:
           with:
             name: report-${{ matrix.os }}-${{ matrix.python-version }}
             path: report.html
-        
+        - name: Run processing test
+          run: pytest test_proc.py > proc-report.html
+        - uses: actions/upload-artifact@v4
+          with:
+            name: proc-report-${{ matrix.os }}-${{ matrix.python-version }}
+            path: proc-report.html
