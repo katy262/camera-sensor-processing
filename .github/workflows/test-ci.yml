@@ -1,4 +1,4 @@
-name: task-all
+name: test-all
 
 on: [push]
 

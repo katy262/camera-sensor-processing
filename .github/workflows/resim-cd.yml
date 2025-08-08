@@ -1,4 +1,4 @@
-name: task-all
+name: build-resim
 
 on: [push]
 
@@ -22,3 +22,7 @@ jobs:
             pip install -r ./requirements.txt
         - name: Build resim
           run: python build_exe.py
+        - uses: actions/upload-artifact@v4
+          with:
+            name: dist/resim-${{ matrix.os }}-${{ matrix.python-version }}
+            path: dist/resim.exe
