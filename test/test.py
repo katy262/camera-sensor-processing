@@ -39,10 +39,10 @@ def test_data_structure(generated_data, simulation):
 def test_timestamp_behavior(generated_data, simulation):
     """Test timestamp behavior"""
     timestamps = generated_data["Timestamp"].astype(float).values
+    assert pytest.approx(timestamps[0], abs=1e-6) == 100 * 10**6
     
     if isinstance(simulation, FrontCameraSimulation):
         # Camera specific timestamp tests
-        assert pytest.approx(timestamps[0], abs=1e-6) == 100 * 10**6
         increments = np.diff(timestamps)
         expected_increment = 27.7 * 1000
         variation = 0.05 * 1000
@@ -142,8 +142,7 @@ def test_camera_specific_columns(generated_data):
     
     # Test Signal2 behavior
     signal2 = generated_data["Signal2"].astype(float).values
-    low_signal_mask = (signal1 < 5) & (signal1 > 0)
-    assert np.all(signal2[low_signal_mask] == 0)
+    assert np.all(signal2[signal1 < 5] == 0)
     high_signal_mask = signal1 >= 5
     if np.any(high_signal_mask):
         assert np.all(signal2[high_signal_mask] >= 70)
