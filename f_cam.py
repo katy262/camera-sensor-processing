@@ -31,7 +31,7 @@ class FrontCameraSimulation:
             new_row["Timestamp"] += time_increment
             new_row["FrameID"] = frame_id
 
-            if new_row["Speed"] < 120:
+            if new_row["Speed"] + speed_increment <= 120:
                 new_row["Speed"] += speed_increment
             else:
                 new_row["Speed"] = 120.0 + np.random.uniform(-0.05, 0.05)
