@@ -14,9 +14,13 @@ class Reprocessor:
             print(f"Error: One or both input files do not exist: {self.sensor_data_path}, {self.camera_data_path}")
             print("Please check the file paths and try again.")
             return False
-
-        self.sensor_data = pd.read_csv(self.sensor_data_path)
-        self.camera_data = pd.read_csv(self.camera_data_path)
+        
+        try:
+            self.sensor_data = pd.read_csv(self.sensor_data_path)
+            self.camera_data = pd.read_csv(self.camera_data_path)
+        except pd.errors.EmptyDataError:
+            print("Error: One or both input files are empty.")
+            return False
         return True
 
     def reprocess_data(self):
