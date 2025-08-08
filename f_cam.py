@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 class FrontCameraSimulation:
+    """Class representing a front camera simulation."""
     def __init__(self, from_id=100, frames=2000):
         self.from_id = from_id
         self.frames = frames
@@ -51,6 +52,7 @@ class FrontCameraSimulation:
         return self.data
     
     def format_data(self):
+        # format data for output csv
         self.data["FrameID"] = self.data["FrameID"].astype(int)
         self.data["Signal1"] = self.data["Signal1"].astype(int)
 
@@ -76,7 +78,7 @@ class FrontCameraSimulation:
 if __name__ == "__main__":
     # for command line output path definition
     import argparse
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Generates front camera simulation data and saves it to CSV.")
     parser.add_argument("--output_dir", type=str, default="data", help="output directory path")
     args = parser.parse_args()
 

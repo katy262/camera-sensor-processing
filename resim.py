@@ -4,12 +4,14 @@ import os
 from pathlib import Path
 
 class Reprocessor:
+    """Class representing reprocessing device for camera and sensor data."""
     def __init__(self, camera_data_path, sensor_data_path):
+        # save file paths
         self.sensor_data_path = sensor_data_path
         self.camera_data_path = camera_data_path
-        self.data = None
     
     def try_load_data(self):
+        # fail if files do not exist
         if not os.path.exists(self.sensor_data_path) or not os.path.exists(self.camera_data_path):
             print(f"Error: One or both input files do not exist: {self.sensor_data_path}, {self.camera_data_path}")
             print("Please check the file paths and try again.")
@@ -19,14 +21,16 @@ class Reprocessor:
             self.sensor_data = pd.read_csv(self.sensor_data_path)
             self.camera_data = pd.read_csv(self.camera_data_path)
         except pd.errors.EmptyDataError:
+            # fail if files are empty
             print("Error: One or both input files are empty.")
             return False
+        
+        print("Data loaded successfully.")
         return True
 
     def reprocess_data(self):
-        # load data for processing
+        # try loading data for processing
         if not self.try_load_data():
-            # return None if loading fails
             return None
         
         # copy camera data
@@ -45,6 +49,7 @@ class Reprocessor:
         return self.data
     
     def format_data(self):
+        # format data for output csv
         self.data["FrameID"] = self.data["FrameID"].astype(int)
         self.data["Signal1"] = self.data["Signal1"].astype(int)
 
@@ -56,6 +61,7 @@ class Reprocessor:
         return self.data
 
     def to_csv(self, output_dir):
+        # save processed data to CSV
         if self.reprocess_data() is not None:
             self.format_data()
 
@@ -65,19 +71,20 @@ class Reprocessor:
             # save to CSV in defined location
             output_path = os.path.join(output_dir, "resim_out.csv")
             self.data.to_csv(output_path, index=False)
+            print(f"Processed data saved to csv file {output_path}")
         
 # when directly running the script
 if __name__ == "__main__":
     # for command line inputs location definition and output path definition
     import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_sensor", type=str, default="data/sensor_out.csv", help="input sensor CSV file path")
-    parser.add_argument("--input_camera", type=str, default="data/f_cam_out.csv", help="input front camera CSV file path")
+    parser = argparse.ArgumentParser(description="Loads sensor and front camera csv files and processes it.")
+    parser.add_argument("--sensor", type=str, default="data/sensor_out.csv", help="path to sensor CSV file")
+    parser.add_argument("--camera", type=str, default="data/f_cam_out.csv", help="path to front camera CSV file")
     parser.add_argument("--output_dir", type=str, default="data", help="output directory path")
     args = parser.parse_args()
 
     # process data and save to CSV
-    processing = Reprocessor(args.input_camera, args.input_sensor)
+    processing = Reprocessor(args.camera, args.sensor)
     processing.to_csv(args.output_dir)
 
 

@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 class SensorSimulation:
+    """Class representing a sensor simulation."""
     def __init__(self, from_s=100, to_s=160):
         # convert seconds to microseconds
         conversion_factor = 1000000
@@ -46,6 +47,7 @@ class SensorSimulation:
         return self.data
     
     def format_data(self):
+        # format data for output csv
         self.data['Timestamp'] = self.data['Timestamp'].apply(lambda x: f"{x:.6f}")
         self.data['Speed'] = self.data['Speed'].apply(lambda x: f"{x:.2f}")
         return self.data
@@ -65,7 +67,7 @@ class SensorSimulation:
 if __name__ == "__main__":
     # for command line output path definition
     import argparse
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Generates sensor simulation data and saves it to CSV.")
     parser.add_argument("--output_dir", type=str, default="data", help="output directory path")
     args = parser.parse_args()
 
