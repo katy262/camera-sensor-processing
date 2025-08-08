@@ -30,7 +30,7 @@ class SensorSimulation:
             # update values
             new_row["Timestamp"] += time_increment
 
-            if new_row["Speed"] < 120:
+            if new_row["Speed"] + speed_increment <= 120:
                 new_row["Speed"] += speed_increment
             else:
                 new_row["Speed"] = 120.0 + np.random.uniform(-0.1, 0.1)
