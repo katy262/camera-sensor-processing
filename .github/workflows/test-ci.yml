@@ -1,0 +1,34 @@
+name: task-all
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.10", "3.11", "pypy3.10"]
+        exclude:
+          - os: macos-latest
+            python-version: "3.10"
+          - os: windows-latest
+            python-version: "3.10"
+    name: pytest
+    steps:
+        - uses: actions/checkout@v4
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.11'
+            cache: 'pip'
+        - name: Install dependencies
+          run: |
+            pip install -r ./requirements.txt
+        - name: Run test
+          run: pytest .//test.py > report.html
+        - uses: actions/upload-artifact@v4
+          with:
+            name: report-${{ matrix.os }}-${{ matrix.python-version }}
+            path: report.html
+        
