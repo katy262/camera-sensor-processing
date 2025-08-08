@@ -1,8 +1,10 @@
 import pandas as pd
-import numpy as np  
+import numpy as np
+import os
+from pathlib import Path
 
 class Reprocessor:
-    def __init__(self, sensor_data_path, camera_data_path):
+    def __init__(self, camera_data_path, sensor_data_path):
         self.sensor_data_path = sensor_data_path
         self.camera_data_path = camera_data_path
     
@@ -39,23 +41,29 @@ class Reprocessor:
 
         return self.data
 
-    def to_csv(self, file_path):
+    def to_csv(self, output_dir):
         self.reprocess_data()
         self.format_data()
-        self.data.to_csv(file_path, index=False)
+
+        # create directory if it doesn't exist
+        Path(output_dir).mkdir(parents=True, exist_ok=True)
+        
+        # save to CSV in defined location
+        output_path = os.path.join(output_dir, "resim_out.csv")
+        self.data.to_csv(output_path, index=False)
         
 # when directly running the script
 if __name__ == "__main__":
     # for command line inputs location definition and output path definition
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input-sensor", type=str, default="data/sensor_out.csv", help="input sensor CSV file path")
-    parser.add_argument("--input-camera", type=str, default="data/f_cam_out.csv", help="input front camera CSV file path")
-    parser.add_argument("--output", type=str, default="data/resim_out.csv", help="output CSV file path")
+    parser.add_argument("--input_sensor", type=str, default="data/sensor_out.csv", help="input sensor CSV file path")
+    parser.add_argument("--input_camera", type=str, default="data/f_cam_out.csv", help="input front camera CSV file path")
+    parser.add_argument("--output_dir", type=str, default="data", help="output directory path")
     args = parser.parse_args()
 
     # process data and save to CSV
-    simulation = Reprocessor(args.input_sensor, args.input_camera)
-    simulation.to_csv(args.output)
+    processing = Reprocessor(args.input_camera, args.input_sensor)
+    processing.to_csv(args.output_dir)
 
 

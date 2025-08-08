@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import os
+from pathlib import Path
 
 class FrontCameraSimulation:
     def __init__(self, from_id=100, frames=2000):
@@ -59,19 +61,25 @@ class FrontCameraSimulation:
 
         return self.data
 
-    def to_csv(self, file_path):
+    def to_csv(self, output_dir):
         self.generate_data()
         self.format_data()
-        self.data.to_csv(file_path, index=False)
+
+        # create directory if it doesn't exist
+        Path(output_dir).mkdir(parents=True, exist_ok=True)
+        
+        # save to CSV in defined location
+        output_path = os.path.join(output_dir, "f_cam_out.csv")
+        self.data.to_csv(output_path, index=False)
         
 # when directly running the script
 if __name__ == "__main__":
     # for command line output path definition
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=str, default="data/f_cam_out.csv", help="output CSV file path")
+    parser.add_argument("--output_dir", type=str, default="data", help="output directory path")
     args = parser.parse_args()
 
     # create simulation and save to CSV
     simulation = FrontCameraSimulation()
-    simulation.to_csv(args.output)
+    simulation.to_csv(args.output_dir)
