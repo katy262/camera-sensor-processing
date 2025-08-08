@@ -26,7 +26,7 @@ class FrontCameraSimulation:
             frame_id = self.from_id + row_index
 
             # update values
-            new_row["Timestamp"] =+ time_increment
+            new_row["Timestamp"] += time_increment
             new_row["FrameID"] = frame_id
 
             if new_row["Speed"] < 120:
